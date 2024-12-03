@@ -1,0 +1,86 @@
+#!/bin/bash
+#
+# Simple block for starting and exiting from roblox instance.
+# Parameters:
+#  $NAME - button text/game name
+#  $PLACE_ID - place id
+# 
+
+# Default arguments
+BASE_COLOR=${BASE_COLOR:-#CCCCCC}
+RUNNING_COLOR=${RUNNING_COLOR:-#00FF00}
+NAME=${NAME:-Roblox Game}
+PLACE_ID=${PLACE_ID:-1}
+
+#while getopts b:r:n:p:h opt; do
+#	case "$opt" in
+#        b) BASE_COLOR="$OPTARG" ;;
+#        r) RUNNING_COLOR="$OPTARG" ;;
+#		n) NAME="$OPTARG" ;;
+#		p) PLACE_ID="$OPTARG" ;;
+#		h) printf "help" ;;
+#	esac
+#done
+
+#RUNTIME
+color=$BASE_COLOR
+
+drawBlock() {
+    printf '{"full_text": "%s", "color": "%s"}\n' $NAME $color
+}
+
+robloxPid() {
+    pgrep -o sober
+}
+
+_watchRobloxRunning() {
+    color=$RUNNING_COLOR
+    drawBlock
+
+    while kill -0 $pid 2> /dev/null; do
+        sleep 1
+    done
+
+    pid=-1
+    color=$BASE_COLOR
+    drawBlock
+}
+
+watchForRoblox() {
+    while : ; do
+        if [[ $(robloxPid) ]]; then
+            # found process
+            pid=$(robloxPid)
+            _watchRobloxRunning
+        fi
+        sleep 1
+    done
+}
+
+function startRoblox {
+    if [[ -z $(robloxPid) ]]; then 
+        eval $(printf 'org.vinegarhq.Sober "roblox://experiences/start?placeId=%s" > /dev/null 2>&1 &' $PLACE_ID)
+        pid=$!
+    fi
+}
+
+function killRoblox {
+    if [[ $(robloxPid) ]]; then
+        pkill $(robloxPid)
+        pid=-1
+    fi
+}
+
+watchForRoblox &
+
+drawBlock
+while read -r inputJSON; do
+    echo $inputJSON > /tmp/input.json
+    button=$(jq .button <<< $inputJSON)
+
+    case $button in
+        1) startRoblox ;;
+        2) killRoblox ;;
+        *)  ;;
+    esac
+done

@@ -1,0 +1,13 @@
+syntax enable
+syntax on
+
+" Apply the indentation of the current line to the next line.
+set autoindent
+set smartindent
+set complete-=i
+set showmatch
+set smarttab
+
+set tabstop=4
+set shiftwidth=4
+set expandtab

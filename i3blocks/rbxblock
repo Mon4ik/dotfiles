@@ -66,7 +66,7 @@ function startRoblox {
 
 function killRoblox {
     if [[ $(robloxPid) ]]; then
-        pkill $(robloxPid)
+        kill $(robloxPid)
         pid=-1
     fi
 }
@@ -75,12 +75,11 @@ watchForRoblox &
 
 drawBlock
 while read -r inputJSON; do
-    echo $inputJSON > /tmp/input.json
     button=$(jq .button <<< $inputJSON)
 
     case $button in
         1) startRoblox ;;
-        2) killRoblox ;;
+        3) killRoblox ;;
         *)  ;;
     esac
 done

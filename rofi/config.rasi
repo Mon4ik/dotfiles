@@ -1,0 +1,5 @@
+configuration {
+}
+
+//@theme "./i3-like.rasi"
+@theme "/usr/share/rofi/themes/android_notification.rasi"

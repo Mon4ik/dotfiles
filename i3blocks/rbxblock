@@ -26,7 +26,7 @@ PLACE_ID=${PLACE_ID:-1}
 color=$BASE_COLOR
 
 drawBlock() {
-    printf '{"full_text": "%s", "color": "%s"}\n' $NAME $color
+    printf '{"full_text": "%s", "color": "%s"}\n' "$NAME" "$color"
 }
 
 robloxPid() {

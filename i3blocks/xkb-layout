@@ -2,7 +2,7 @@
 
 while : 
 do
-    xkb-switch
+    printf "%s \uf11c\n" $(xkb-switch)
 
     xkb-switch -w
 done

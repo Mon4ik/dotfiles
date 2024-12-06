@@ -1,13 +1,24 @@
 separator=true
-separator_block_width=15
+separator_block_width=18
+
+#[rbxstatus]
+#format=json
+#command=./rbxstatus/start
+#interval=persist
 
 [nnb]
-NAME=NNB
+NAME=\uf005 Bhoppin'
 PLACE_ID=10118559731
 
 format=json
-command=./rbxblock 
+command=./rbxblock
 interval=persist
+
+[home_disk]
+label= 
+instance=/home
+interval=30
+command=./disk_usage
 
 [xkb]
 command=./xkb-layout

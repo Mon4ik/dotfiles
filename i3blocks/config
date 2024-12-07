@@ -14,6 +14,13 @@ format=json
 command=./rbxblock
 interval=persist
 
+[cpu]
+LABEL=\uf4bc
+
+format=json
+interval=persist
+command=./cpu_usage
+
 [home_disk]
 label= 
 instance=/home

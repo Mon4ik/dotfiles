@@ -25,7 +25,7 @@ print_block() {
 print_block "-.--"
 
 while : ; do
-    CPU_USAGE="$(mpstat 1 1 | awk '{print $3}' | xargs | awk '{print $3}' | sed 's/,/./')"
+    CPU_USAGE="$(mpstat 1 1 | awk '{print $3}' | xargs | awk '{print $4}' | sed 's/,/./')"
     print_block $CPU_USAGE
     sleep $USAGE_INTERVAL
 done

@@ -14,3 +14,16 @@ set expandtab
 
 " apply 2 spaces for yaml
 autocmd FileType yaml setlocal ts=2 sts=2 sw=2 expandtab
+
+" vim plug
+call plug#begin()
+
+Plug 'preservim/nerdtree'
+
+call plug#end()
+
+"" Hotkeys
+nnoremap <C-b> :make<CR>
+
+" nerd tree settings
+nnoremap <C-t> :NERDTreeToggle<CR>

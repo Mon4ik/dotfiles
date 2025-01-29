@@ -33,7 +33,3 @@ vim.api.nvim_create_autocmd("FileType", {
         vim.opt.shiftwidth = 2
     end
 })
-
--- Theme
-vim.cmd.colorscheme("gruvbox")
-

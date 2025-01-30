@@ -2,6 +2,14 @@
 
 Collection of my dotfiles
 
+## btw
+
+I think the most useful part isn't the dotfiles themselves, but the (`create-links.py`)[./create-links.py] utility:
+
+ - It doesn't have any dependencies (only builtin).
+ - Requires only `python3.*` 
+ - Has human readable manifests (see `*.manifest`)
+
 ## Setup
 
 ```shell

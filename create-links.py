@@ -1,5 +1,8 @@
 #!/bin/python3
 
+# (c) 2025 idkncc (Dmitry B.)
+# This code in licensed under MIT License (see LICENSE for details)
+
 from pathlib import PosixPath
 import argparse
 import os
@@ -23,13 +26,14 @@ class AnsiCodes:
 
     BrightBlack = "\033[0;90m"
 
+
 def make_link(linkPath: PosixPath, targetPath: PosixPath) -> str:
     if linkPath.exists():
         # TODO: ask to override
 
         if os.readlink(linkPath.as_posix()) == targetPath.as_posix():
             return f"{AnsiCodes.Yellow}Skipped (exists, but has same target){AnsiCodes.Reset}"
-        
+
         if not linkPath.is_symlink():
             return f"{AnsiCodes.Red}Skipped (link path isn't a symbolic link){AnsiCodes.Reset}"
 
@@ -40,11 +44,13 @@ def make_link(linkPath: PosixPath, targetPath: PosixPath) -> str:
         action = ""
         while True:
             action = input("Actions: [o]verride, [s]kip: ")
-            if action == "o" or action == "s": break
+            if action == "o" or action == "s":
+                break
 
         if action == "o":
             os.unlink(linkPath)
-            os.symlink(targetPath.as_posix(), linkPath.as_posix(), targetPath.is_dir())
+            os.symlink(targetPath.as_posix(),
+                       linkPath.as_posix(), targetPath.is_dir())
 
             return f"{AnsiCodes.Green}Overriden{AnsiCodes.Reset}"
         elif action == "s":
@@ -52,12 +58,11 @@ def make_link(linkPath: PosixPath, targetPath: PosixPath) -> str:
     else:
         # create new link
 
-        os.symlink(targetPath.as_posix(), linkPath.as_posix(), targetPath.is_dir())
+        os.symlink(targetPath.as_posix(),
+                   linkPath.as_posix(), targetPath.is_dir())
         return f"{AnsiCodes.Green}Linked{AnsiCodes.Reset}"
 
     return f"{AnsiCodes.BrightBlack}Unknown{AnsiCodes.Reset}"
-
-    
 
 
 parser = argparse.ArgumentParser(description='Creates dotfiles linking')
@@ -78,5 +83,5 @@ for entry in filter(lambda entry: not entry.startswith("#") and len(entry.split(
     targetPath = PosixPath(target).expanduser().resolve()
 
     status = make_link(linkPath, targetPath)
-    
+
     print(f"{AnsiCodes.Cyan}{link} > {target}{AnsiCodes.Reset}: {status}")

@@ -1,3 +1,0 @@
-[submodule ".vim/pack/plugins/start/tabular"]
-	path = .vim/pack/plugins/start/tabular
-	url = https://github.com/godlygeek/tabular.git

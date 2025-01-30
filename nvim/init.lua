@@ -1,3 +1,4 @@
-require("core/lazy")
-require("core/settings")
-require("hotkeys")
+require("config.lazy")
+require("config.options")
+require("config.keymaps")
+require("config.autocmds")

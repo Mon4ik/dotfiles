@@ -20,6 +20,6 @@ cd dotfiles
 # 2. Link all directories
 chmod +x ./create-links.py
 
-./create-links.py links-xdg.manifest # for Linux distros with ~/.config/<...>
-# ./create-links.py links-mac.manifest # for Mac (WIP) 
+./create-links.py links-i3.manifest # for Linux distros with i3-wm 
+./create-links.py links-mac.manifest # for Mac (WIP) 
 ```

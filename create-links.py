@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
 # (c) 2025 idkncc (Dmitry B.)
 # This code in licensed under MIT License (see LICENSE for details)
@@ -6,7 +6,6 @@
 from pathlib import PosixPath
 import argparse
 import os
-from re import I
 
 
 class AnsiCodes:
@@ -27,19 +26,60 @@ class AnsiCodes:
     BrightBlack = "\033[0;90m"
 
 
+def create_symlink(linkPath: PosixPath, targetPath: PosixPath):
+    """
+    Internal usage only!
+    Make all necessary checks before!
+    """
+
+    relativeTargetPath= os.path.relpath(targetPath, linkPath.parent)
+
+    os.symlink(relativeTargetPath,
+               linkPath)
+
+
 def make_link(linkPath: PosixPath, targetPath: PosixPath) -> str:
+    relativeTargetPath= os.path.relpath(targetPath, linkPath.parent)
+    
     if linkPath.exists():
         # TODO: ask to override
 
-        if os.readlink(linkPath.as_posix()) == targetPath.as_posix():
-            return f"{AnsiCodes.Yellow}Skipped (exists, but has same target){AnsiCodes.Reset}"
-
         if not linkPath.is_symlink():
-            return f"{AnsiCodes.Red}Skipped (link path isn't a symbolic link){AnsiCodes.Reset}"
+            print(
+                f"{AnsiCodes.Magenta}{AnsiCodes.Bold}{link}{AnsiCodes.Magenta} isn't a symlink.{AnsiCodes.Reset}")
+
+            action = ""
+            while True:
+                action = input(
+                    "Actions: [b]ackup and override, [o]verride, [s]kip: ")
+                if action == "b" or action == "o" or action == "s":
+                    break
+
+            if action == "b":
+                # add .bak suffix for old file
+                os.rename(linkPath.as_posix(),
+                          linkPath.parent / (linkPath.name + ".bak"))
+
+                create_symlink(linkPath, targetPath)
+
+                return f"{AnsiCodes.Green}Renamed and linked{AnsiCodes.Reset}"
+            elif action == "o":
+                os.remove(linkPath.as_posix())
+
+                create_symlink(linkPath, targetPath)
+ 
+                return f"{AnsiCodes.Red}Overriden{AnsiCodes.Reset}"
+            elif action == "s":
+                return f"{AnsiCodes.Red}Skipped{AnsiCodes.Reset}"
+            else:
+                print("unreachable")
+                exit(1)
+        if os.readlink(linkPath.as_posix()) == relativeTargetPath:
+            return f"{AnsiCodes.Yellow}Skipped (exists, but has same target){AnsiCodes.Reset}"
 
         print(f"{AnsiCodes.Magenta}Looks like {AnsiCodes.Bold}{link}{AnsiCodes.Magenta} already exists{AnsiCodes.Reset}")
         print(f" * Currently links to {os.readlink(linkPath.as_posix())}")
-        print(f" * Should link to     {targetPath.as_posix()}")
+        print(f" * Should link to     {relativeTargetPath}")
 
         action = ""
         while True:
@@ -49,21 +89,21 @@ def make_link(linkPath: PosixPath, targetPath: PosixPath) -> str:
 
         if action == "o":
             os.unlink(linkPath)
-            os.symlink(targetPath.as_posix(),
-                       linkPath.as_posix(), targetPath.is_dir())
+            
+            create_symlink(linkPath, targetPath)
 
             return f"{AnsiCodes.Green}Overriden{AnsiCodes.Reset}"
         elif action == "s":
             return f"{AnsiCodes.Yellow}Skipped{AnsiCodes.Reset}"
+        else:
+            print("unreachable")
+            exit(1)
     else:
         # create new link
 
-        os.symlink(targetPath.as_posix(),
-                   linkPath.as_posix(), targetPath.is_dir())
+        create_symlink(linkPath, targetPath)
+        
         return f"{AnsiCodes.Green}Linked{AnsiCodes.Reset}"
-
-    return f"{AnsiCodes.BrightBlack}Unknown{AnsiCodes.Reset}"
-
 
 parser = argparse.ArgumentParser(description='Creates dotfiles linking')
 parser.add_argument(
@@ -76,7 +116,10 @@ args = parser.parse_args()
 
 manifest: str = args.manifest.read()
 
-for entry in filter(lambda entry: not entry.startswith("#") and len(entry.split(">")) == 2, manifest.splitlines()):
+entries = filter(
+    lambda entry: not entry.startswith("#") and len(entry.split(">")) == 2,
+    manifest.splitlines())
+for entry in entries:
     link, target = map(lambda a: a.strip(), entry.split(">"))
 
     linkPath = PosixPath(link).expanduser()

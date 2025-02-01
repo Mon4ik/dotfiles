@@ -1,0 +1,5 @@
+~/.config/nvim > nvim
+~/.config/lazygit > lazygit
+
+# files
+~/.gitconfig > .gitconfig

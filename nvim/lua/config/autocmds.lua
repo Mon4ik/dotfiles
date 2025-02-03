@@ -1,7 +1,8 @@
 -- Set 2 spaces for yaml
 vim.api.nvim_create_autocmd("FileType", {
     pattern = {
-        "*.yaml", "*.yml"
+        "*.yaml", "*.yml",
+        "*.sql"
     },
     callback = function()
         vim.opt.tabstop = 2

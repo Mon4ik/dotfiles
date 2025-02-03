@@ -3,9 +3,15 @@ vim.g.loaded_netrwPlugin = 1
 
 vim.opt.termguicolors = true
 
+-- @see init.lua
+-- vim.g.mapleader = ","
+
 ----[[ SYNTAX ]]----
 vim.cmd.syntax("enable")
 vim.cmd.syntax("on")
+
+vim.opt.list = true
+vim.opt.listchars = "space:·"
 
 ----[[ INDENTS ]]----
 vim.opt.autoindent = true

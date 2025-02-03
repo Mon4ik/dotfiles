@@ -15,6 +15,34 @@ return {
                 },
                 renderer = {
                     group_empty = true,
+                    icons = {
+                        glyphs = {
+                            default = "",
+                            symlink = "",
+                            bookmark = "󰆤",
+                            modified = "●",
+                            hidden = "󰜌",
+                            folder = {
+                                arrow_closed = "",
+                                arrow_open = "",
+                                default = "",
+                                open = "",
+                                empty = "",
+                                empty_open = "",
+                                symlink = "",
+                                symlink_open = "",
+                            },
+                            git = {
+                                unstaged = "",
+                                staged = "",
+                                unmerged = "",
+                                renamed = "",
+                                untracked = "",
+                                deleted = "",
+                                ignored = "",
+                            },
+                        },
+                    }
                 },
                 filters = {
                     dotfiles = true,
@@ -42,5 +70,18 @@ return {
     {
         "normen/vim-pio",
         lazy = false
+    },
+    {
+        "lukas-reineke/indent-blankline.nvim",
+        config = function()
+            local highlight = {
+                "CursorColumn",
+                "Whitespace",
+            }
+
+            require("ibl").setup({
+                indent = { highlight = highlight, char = "|" },
+            })
+        end
     }
 }

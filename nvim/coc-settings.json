@@ -1,4 +1,5 @@
 {
+    "diagnostic.enableHighlightLineNumber": true,
     "Lua.diagnostics.globals": [
         "vim"
     ],

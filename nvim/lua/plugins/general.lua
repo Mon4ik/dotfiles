@@ -13,8 +13,25 @@ return {
                 view = {
                     width = 30,
                 },
+                filters = {
+                    enable = true,
+                    git_ignored = false,
+                    dotfiles = false,
+                    custom = { "^.git$" }
+                },
                 renderer = {
                     group_empty = true,
+                    indent_markers = {
+                        enable = true,
+                        inline_arrows = true,
+                        icons = {
+                            corner = "└",
+                            edge = "│",
+                            item = "│",
+                            bottom = "─",
+                            none = " ",
+                        },
+                    },
                     icons = {
                         glyphs = {
                             default = "",
@@ -33,19 +50,16 @@ return {
                                 symlink_open = "",
                             },
                             git = {
-                                unstaged = "",
-                                staged = "",
+                                unstaged = "M",
+                                staged = "S",
                                 unmerged = "",
-                                renamed = "",
-                                untracked = "",
-                                deleted = "",
-                                ignored = "",
+                                renamed = "R",
+                                untracked = "?",
+                                deleted = "R",
+                                ignored = "-",
                             },
                         },
                     }
-                },
-                filters = {
-                    dotfiles = true,
                 },
             })
         end

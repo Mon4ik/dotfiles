@@ -1,5 +1,11 @@
 [init]
-	defaultBranch = main
+    defaultBranch = main
 [user]
-	name = Dmitry
-	email = 58977309+Mon4ik@users.noreply.github.com
+    name = Dmitry
+    email = 58977309+Mon4ik@users.noreply.github.com
+	signingkey = AED7F81F081BCDBB5D340691497E8B6875A7B405
+
+[commit]
+    gpgsign = true
+[gpg]
+    program = gpg

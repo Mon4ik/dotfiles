@@ -1,5 +1,6 @@
 ~/.config/nvim > nvim
 ~/.config/lazygit > lazygit
+~/.config/kitty > kitty
 
 # files
 ~/.gitconfig > .gitconfig

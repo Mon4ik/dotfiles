@@ -5,64 +5,62 @@ return {
         dependencies = {
             "nvim-tree/nvim-web-devicons",
         },
-        config = function()
-            require("nvim-tree").setup({
-                sort = {
-                    sorter = "case_sensitive",
-                },
-                view = {
-                    width = 30,
-                },
-                filters = {
+        opts = {
+            sort = {
+                sorter = "case_sensitive",
+            },
+            view = {
+                width = 30,
+            },
+            filters = {
+                enable = true,
+                git_ignored = false,
+                dotfiles = false,
+                custom = { "^.git$" }
+            },
+            renderer = {
+                group_empty = true,
+                indent_markers = {
                     enable = true,
-                    git_ignored = false,
-                    dotfiles = false,
-                    custom = { "^.git$" }
+                    inline_arrows = true,
+                    icons = {
+                        corner = "└",
+                        edge = "│",
+                        item = "│",
+                        bottom = "─",
+                        none = " ",
+                    },
                 },
-                renderer = {
-                    group_empty = true,
-                    indent_markers = {
-                        enable = true,
-                        inline_arrows = true,
-                        icons = {
-                            corner = "└",
-                            edge = "│",
-                            item = "│",
-                            bottom = "─",
-                            none = " ",
+                icons = {
+                    glyphs = {
+                        default = "",
+                        symlink = "",
+                        bookmark = "󰆤",
+                        modified = "●",
+                        hidden = "󰜌",
+                        folder = {
+                            arrow_closed = "",
+                            arrow_open = "",
+                            default = "",
+                            open = "",
+                            empty = "",
+                            empty_open = "",
+                            symlink = "",
+                            symlink_open = "",
+                        },
+                        git = {
+                            unstaged = "M",
+                            staged = "S",
+                            unmerged = "",
+                            renamed = "R",
+                            untracked = "?",
+                            deleted = "R",
+                            ignored = "-",
                         },
                     },
-                    icons = {
-                        glyphs = {
-                            default = "",
-                            symlink = "",
-                            bookmark = "󰆤",
-                            modified = "●",
-                            hidden = "󰜌",
-                            folder = {
-                                arrow_closed = "",
-                                arrow_open = "",
-                                default = "",
-                                open = "",
-                                empty = "",
-                                empty_open = "",
-                                symlink = "",
-                                symlink_open = "",
-                            },
-                            git = {
-                                unstaged = "M",
-                                staged = "S",
-                                unmerged = "",
-                                renamed = "R",
-                                untracked = "?",
-                                deleted = "R",
-                                ignored = "-",
-                            },
-                        },
-                    }
-                },
-            })
-        end
+                }
+            }
+        }
     },
     {
         'nvim-telescope/telescope.nvim',

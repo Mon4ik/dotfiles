@@ -13,13 +13,10 @@ vim.cmd.syntax("on")
 vim.opt.list = true
 vim.opt.listchars = "space:·"
 
-----[[ Side Column (with numbers) ]]----
+----[[ SIDE COLUMNS (with diagnostics/numbers) ]]----
 
-vim.cmd([[set nu]])
-vim.cmd([[set signcolumn=yes]])
--- vim.cmd([[hi coc_err_hi ctermfg=1 ctermbg=15]])
--- vim.cmd([[sign define coc_err numhl=coc_err_hi]])
--- vim.cmd([[sign place 1 line=2 name=coc_err]])
+vim.opt.number = true
+vim.opt.signcolumn = "yes"
 
 ----[[ INDENTS ]]----
 vim.opt.autoindent = true
@@ -32,12 +29,13 @@ vim.opt.tabstop = 4
 vim.opt.shiftwidth = 4
 vim.opt.expandtab = true
 
-----[[ Mouse ]]----
+----[[ MOUSE ]]----
 vim.opt.mouse = ""
 
 vim.opt.backup = false
 vim.opt.writebackup = false
 
+----[[ OTHER ]]----
 -- Having longer updatetime (default is 4000 ms = 4s) leads to noticeable
 -- delays and poor user experience
 vim.opt.updatetime = 300

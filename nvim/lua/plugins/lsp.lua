@@ -66,6 +66,7 @@ return {
                         [vim.diagnostic.severity.ERROR] = 'ErrorMsg',
                         [vim.diagnostic.severity.WARN] = 'WarningMsg',
                         [vim.diagnostic.severity.HINT] = 'HintMsg',
+                        [vim.diagnostic.severity.INFO] = 'InfoMsg',
                     },
                 },
                 virtual_text = {
@@ -79,6 +80,7 @@ return {
                     border = "rounded",
                     format = function(d)
                         return ("%s (%s) [%s]"):format(d.message, d.source, d.code or d.user_data.lsp.code)
+                        
                     end,
                 },
                 underline = true,
@@ -99,7 +101,7 @@ return {
 
                     vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>")
                     vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
-        vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>")
+                    vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>")
 
                     vim.keymap.set('n', '<leader>a', '<cmd>lua vim.lsp.buf.code_action()<cr>', keymap_opts)
                     vim.keymap.set({ 'n', 'x' }, '<C-f>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>',
@@ -130,8 +132,14 @@ return {
                     end,
                 },
                 window = {
-                    completion = cmp.config.window.bordered(),
-                    documentation = cmp.config.window.bordered(),
+                    completion = {
+                        border = "rounded",
+                        winhighlight = "Normal:Normal,FloatBorder:Normal,Search:None"
+                    },
+                    documentation = {
+                        border = "rounded",
+                        winhighlight = "Normal:Normal,FloatBorder:Normal,Search:None"
+                    },
                 },
                 mapping = cmp.mapping.preset.insert({
                     ['<C-b>'] = cmp.mapping.scroll_docs(-4),

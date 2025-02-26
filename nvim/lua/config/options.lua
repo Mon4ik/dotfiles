@@ -15,8 +15,8 @@ vim.opt.listchars = "space:·"
 
 ----[[ Side Column (with numbers) ]]----
 
--- vim.cmd([[set nu]])
--- vim.cmd([[set signcolumn=no]])
+vim.cmd([[set nu]])
+vim.cmd([[set signcolumn=yes]])
 -- vim.cmd([[hi coc_err_hi ctermfg=1 ctermbg=15]])
 -- vim.cmd([[sign define coc_err numhl=coc_err_hi]])
 -- vim.cmd([[sign place 1 line=2 name=coc_err]])

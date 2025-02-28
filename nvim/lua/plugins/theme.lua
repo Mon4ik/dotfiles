@@ -4,16 +4,31 @@ return {
         priority = 1000,
         lazy = false,
         config = function()
-            require("gruvbox").setup {}
+            local function getColor(group, attr)
+                return vim.fn.synIDattr(vim.fn.synIDtrans(vim.fn.hlID(group)), attr)
+            end
+
+            require("gruvbox").setup {
+                overrides = {
+                    SignColumn = { link = "Normal" },
+
+                    SnacksPicker = { link = "Normal" },
+                    SnacksPickerBorder = { link = "Normal" },
+                    SnacksPickerGitStatusUntracked = { link = "GruvboxFg3" },
+
+                    -- Fix LSP sign column:
+                    GruvboxYellowSign = { bg = getColor("Normal", "bg#") },
+                    GruvboxRedSign = { bg = getColor("Normal", "bg#") },
+                    GruvboxAquaSign = { bg = getColor("Normal", "bg#") },
+                    GruvboxBlueSign = { bg = getColor("Normal", "bg#") },
+                    GruvboxGreenSign = { bg = getColor("Normal", "bg#") },
+                    GruvboxOrangeSign = { bg = getColor("Normal", "bg#") },
+                    GruvboxPurpleSign = { bg = getColor("Normal", "bg#") },
+                }
+            }
 
             vim.opt.background = "dark"
             vim.cmd.colorscheme("gruvbox")
-
-            vim.cmd([[highlight! link SignColumn Normal]])
-            vim.cmd([[highlight! link ColorColumn Normal]])
-            vim.cmd([[highlight! link SnacksPicker Normal]])
-            vim.cmd([[highlight! link SnacksPickerBorder Normal]])
-            vim.cmd([[highlight! link SnacksPickerGitStatusUntracked Text]])
         end
     }
 }

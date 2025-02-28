@@ -28,6 +28,7 @@ return {
                 },
                 rust_analyzer = {}
             },
+
             icons = {
                 [vim.diagnostic.severity.ERROR] = '',
                 [vim.diagnostic.severity.WARN] = '',
@@ -80,7 +81,6 @@ return {
                     border = "rounded",
                     format = function(d)
                         return ("%s (%s) [%s]"):format(d.message, d.source, d.code or d.user_data.lsp.code)
-                        
                     end,
                 },
                 underline = true,

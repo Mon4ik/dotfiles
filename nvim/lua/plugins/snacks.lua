@@ -8,20 +8,89 @@ return {
 
         ---@type snacks.Config
         opts = {
-            bigfile = { enabled = true },
-            dashboard = { enabled = true },
-            explorer = { enabled = true },
+            dashboard = {
+                enabled = true,
+
+                width = 60,
+                row = nil,    -- dashboard position. nil for center
+                col = nil,    -- dashboard position. nil for center
+                pane_gap = 4, -- empty columns between vertical panes
+                autokeys = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ",
+                preset = {
+                    keys = {
+                        { icon = " ", key = "f", desc = "Find File", action = ":lua Snacks.dashboard.pick('files')" },
+                        { icon = " ", key = "n", desc = "New File", action = ":ene | startinsert" },
+                        { icon = " ", key = "g", desc = "Find Text", action = ":lua Snacks.dashboard.pick('live_grep')" },
+                        { icon = " ", key = "r", desc = "Recent Files", action = ":lua Snacks.dashboard.pick('oldfiles')" },
+                        { icon = "󰒲 ", key = "L", desc = "Lazy", action = ":Lazy", enabled = package.loaded.lazy ~= nil },
+                        { icon = "󰔶 ", key = "M", desc = "Mason", action = ":Mason" },
+
+                        { icon = " ", key = "q", desc = "Quit", action = ":qa" },
+                    },
+                    header = ([[
+`7MN.   `7MF'              `7MMF'   `7MF'db                    $
+  MMN.    M                  `MA     ,V  ``                    $
+  M YMb   M  .gP"Ya   ,pW"Wq. VM:   ,V `7MM  `7MMpMMMb.pMMMb.  $
+  M  `MN. M ,M'   Yb 6W'   `Wb MM.  M'   MM    MM    MM    MM  $
+  M   `MM.M 8M"""""" 8M     M8 `MM A'    MM    MM    MM    MM  $
+  M     YMM YM.    , YA.   ,A9  :MM;     MM    MM    MM    MM  $
+.JML.    YM  `Mbmmd'  `Ybmd9'    VF    .JMML..JMML  JMML  JMML.$
+
+The editor. Not a web slop.]]):gsub('%$', ''),
+                },
+                formats = {
+                    icon = function(item)
+                        if item.file and item.icon == "file" or item.icon == "directory" then
+                            local icon, hl = Snacks.util.icon(item.file, item.icon)
+                            return { icon, width = 2, hl = hl }
+                        end
+                        return { item.icon, width = 2, hl = "icon" }
+                    end,
+                    footer = { "%s", align = "center" },
+                    header = { "%s", align = "center" },
+                    key = function(item)
+                        return { { "[", hl = "special" }, { item.key, hl = "key" }, { "]", hl = "special" } }
+                    end,
+                    file = function(item, ctx)
+                        local fname = vim.fn.fnamemodify(item.file, ":~")
+                        fname = ctx.width and #fname > ctx.width and vim.fn.pathshorten(fname) or fname
+                        if #fname > ctx.width then
+                            local dir = vim.fn.fnamemodify(fname, ":h")
+                            local file = vim.fn.fnamemodify(fname, ":t")
+                            if dir and file then
+                                file = file:sub(-(ctx.width - #dir - 2))
+                                fname = dir .. "/…" .. file
+                            end
+                        end
+                        local dir, file = fname:match("^(.*)/(.+)$")
+                        return dir and { { dir .. "/", hl = "dir" }, { file, hl = "file" } } or
+                            { { fname, hl = "file" } }
+                    end,
+                },
+                sections = {
+                    { section = "header" },
+                    { icon = "󰊕 ", title = "Actions", section = "keys", indent = 2, padding = 1 },
+                    { icon = " ", title = "Recent Files", section = "recent_files", indent = 2, padding = 1 },
+                    { icon = " ", title = "Recent Folders", section = "projects", indent = 2, padding = 1 },
+                    { section = "startup" },
+                },
+            },
             indent = { enabled = true },
+            scope = { enabled = true },
+
+            bigfile = { enabled = true },
+            quickfile = { enabled = true },
+            statuscolumn = { enabled = true },
+            words = { enabled = true },
+
+            picker = { enabled = true },
             input = { enabled = true },
+            explorer = { enabled = true },
+
             notifier = {
                 enabled = true,
                 timeout = 3000,
             },
-            picker = { enabled = true },
-            quickfile = { enabled = true },
-            scope = { enabled = true },
-            statuscolumn = { enabled = true },
-            words = { enabled = true },
             styles = {
                 notification = {
                     -- wo = { wrap = true } -- Wrap notifications
@@ -34,7 +103,7 @@ return {
             { "<leader>/",       function() Snacks.picker.grep() end,                  desc = "Grep" },
             { "<leader>:",       function() Snacks.picker.command_history() end,       desc = "Command History" },
             { "<leader>n",       function() Snacks.picker.notifications() end,         desc = "Notification History" },
-            { "<leader>e",           function() Snacks.explorer() end,                     desc = "File Explorer" },
+            { "<leader>e",       function() Snacks.explorer() end,                     desc = "File Explorer" },
 
             -- find
 
@@ -51,7 +120,7 @@ return {
             { "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
             -- Other
             { "<leader>cR",      function() Snacks.rename.rename_file() end,           desc = "Rename File" },
-            { "<leader>l",      function() Snacks.lazygit() end,                      desc = "Lazygit" },
+            { "<leader>l",       function() Snacks.lazygit() end,                      desc = "Lazygit" },
         },
 
         init = function()

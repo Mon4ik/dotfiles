@@ -16,6 +16,11 @@ return {
                     SnacksPickerBorder = { link = "Normal" },
                     SnacksPickerGitStatusUntracked = { link = "GruvboxFg3" },
 
+                    SnacksPickerDir = { link = "GruvboxFg1" },
+                    SnacksDashboardDir = { link = "GruvboxFg3" },
+                    SnacksDashboardFile = { link = "Normal" },
+                    SnacksDashboardDesc = { link = "Normal" },
+
                     -- Fix LSP sign column:
                     GruvboxYellowSign = { bg = getColor("Normal", "bg#") },
                     GruvboxRedSign = { bg = getColor("Normal", "bg#") },

@@ -36,7 +36,7 @@ return {
   M     YMM YM.    , YA.   ,A9  :MM;     MM    MM    MM    MM  $
 .JML.    YM  `Mbmmd'  `Ybmd9'    VF    .JMML..JMML  JMML  JMML.$
 
-The editor. Not a web slop.]]):gsub('%$', ''),
+The Editor. Not a Web Slop.]]):gsub('%$', ''),
                 },
                 formats = {
                     icon = function(item)
@@ -93,7 +93,7 @@ The editor. Not a web slop.]]):gsub('%$', ''),
             },
             styles = {
                 notification = {
-                    -- wo = { wrap = true } -- Wrap notifications
+                    wo = { wrap = true } -- Wrap notifications
                 }
             }
         },
@@ -105,22 +105,21 @@ The editor. Not a web slop.]]):gsub('%$', ''),
             { "<leader>n",       function() Snacks.picker.notifications() end,         desc = "Notification History" },
             { "<leader>e",       function() Snacks.explorer() end,                     desc = "File Explorer" },
 
-            -- find
-
+            -- Find/Search
             { "<leader>ff",      function() Snacks.picker.files() end,                 desc = "Find Files" },
-            -- search
             { "<leader>sd",      function() Snacks.picker.diagnostics() end,           desc = "Diagnostics" },
+
             -- LSP
             { "gd",              function() Snacks.picker.lsp_definitions() end,       desc = "Goto Definition" },
             { "gD",              function() Snacks.picker.lsp_declarations() end,      desc = "Goto Declaration" },
-            { "gr",              function() Snacks.picker.lsp_references() end,        nowait = true,                  desc = "References" },
+            { "gr",              function() Snacks.picker.lsp_references() end,        desc = "References",           nowait = true },
             { "gI",              function() Snacks.picker.lsp_implementations() end,   desc = "Goto Implementation" },
-            { "gy",              function() Snacks.picker.lsp_type_definitions() end,  desc = "Goto T[y]pe Definition" },
+            { "gt",              function() Snacks.picker.lsp_type_definitions() end,  desc = "Goto Type Definition" },
             { "<leader>ss",      function() Snacks.picker.lsp_symbols() end,           desc = "LSP Symbols" },
             { "<leader>sS",      function() Snacks.picker.lsp_workspace_symbols() end, desc = "LSP Workspace Symbols" },
+
             -- Other
-            { "<leader>cR",      function() Snacks.rename.rename_file() end,           desc = "Rename File" },
-            { "<leader>l",       function() Snacks.lazygit() end,                      desc = "Lazygit" },
+            { "<leader>r",       function() Snacks.rename.rename_file() end,           desc = "Rename File" },
         },
 
         init = function()
@@ -129,6 +128,7 @@ The editor. Not a web slop.]]):gsub('%$', ''),
                     local snacks_windows = {}
                     local floating_windows = {}
                     local windows = vim.api.nvim_list_wins()
+
                     for _, w in ipairs(windows) do
                         local filetype = vim.api.nvim_get_option_value('filetype', { buf = vim.api.nvim_win_get_buf(w) })
                         if filetype:match('snacks_') ~= nil then
@@ -138,7 +138,6 @@ The editor. Not a web slop.]]):gsub('%$', ''),
                         end
                     end
                     if 1 == #windows - #floating_windows - #snacks_windows then
-                        -- Should quit, so we close all Snacks windows.
                         for _, w in ipairs(snacks_windows) do
                             vim.api.nvim_win_close(w, true)
                         end

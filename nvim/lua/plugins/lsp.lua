@@ -4,6 +4,7 @@ return {
         dependencies = {
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
+            "folke/neoconf.nvim"
         },
         lazy = false,
         opts = {
@@ -15,7 +16,7 @@ return {
                                 version = "LuaJIT",
                             },
                             diagnostics = {
-                                globals = { "vim" },
+                                globals = { "vim", "Snacks" },
                             },
                             workspace = {
                                 library = vim.api.nvim_get_runtime_file("", true),
@@ -26,9 +27,15 @@ return {
                         }
                     }
                 },
-                rust_analyzer = {}
-            },
+                rust_analyzer = {},
 
+                docker_compose_language_service = {},
+                dockerls = {},
+                marksman = {},
+
+                protols = {}
+            },
+            neoconf = {},
             icons = {
                 [vim.diagnostic.severity.ERROR] = '',
                 [vim.diagnostic.severity.WARN] = '',
@@ -36,11 +43,22 @@ return {
                 [vim.diagnostic.severity.INFO] = '',
             }
         },
+        keys = {
+            { 'K',         function() vim.lsp.buf.hover() end,                  desc = "Toggle Hover window" },
+            { 'G',         function() vim.diagnostic.open_float() end,          desc = "Open Diagnostic float window" },
+            { '<C-r>',     function() vim.lsp.buf.rename() end,                 desc = "Rename symbol" },
+            { '[d',        function() vim.diagnostic.goto_prev() end,           desc = "Jump to previous diagnostic" },
+            { ']d',        function() vim.diagnostic.goto_next() end,           desc = "Jump to next diagnostic" },
+            { '<leader>a', function() vim.lsp.buf.code_action() end,            desc = "Code actions" },
+            { '<C-f>',     function() vim.lsp.buf.format({ async = true }) end, desc = "Format document",             mode = { 'n', 'x' } }
+        },
         config = function(_, opts)
             local ensure_installed = {}
             for k, _ in pairs(opts.servers) do
                 ensure_installed[#ensure_installed + 1] = k
             end
+
+            require("neoconf").setup(opts.neoconf)
 
             require("mason").setup()
             require("mason-lspconfig").setup {
@@ -49,12 +67,13 @@ return {
 
             local lspconfig = require('lspconfig')
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
-
             for lsp, config in pairs(opts.servers) do
                 lspconfig[lsp].setup(
                     vim.tbl_extend(
-                        "force",
-                        { capabilities = capabilities },
+                        "keep",
+                        {
+                            capabilities = capabilities,
+                        },
                         config
                     )
                 )
@@ -85,29 +104,6 @@ return {
                 },
                 underline = true,
             })
-            vim.api.nvim_create_autocmd('LspAttach', {
-                desc = 'LSP actions',
-                callback = function(event)
-                    local keymap_opts = { buffer = event.buf }
-
-                    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', keymap_opts)
-                    -- vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', keymap_opts)
-                    -- vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', keymap_opts)
-                    -- vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', keymap_opts)
-                    -- vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', keymap_opts)
-                    -- vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', keymap_opts)
-                    -- vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', keymap_opts)
-                    vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', keymap_opts)
-
-                    vim.keymap.set("n", "gl", "<cmd>lua vim.diagnostic.open_float()<CR>")
-                    vim.keymap.set("n", "[d", "<cmd>lua vim.diagnostic.goto_prev()<CR>")
-                    vim.keymap.set("n", "]d", "<cmd>lua vim.diagnostic.goto_next()<CR>")
-
-                    vim.keymap.set('n', '<leader>a', '<cmd>lua vim.lsp.buf.code_action()<cr>', keymap_opts)
-                    vim.keymap.set({ 'n', 'x' }, '<C-f>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>',
-                        keymap_opts)
-                end,
-            })
         end
     },
     {
@@ -121,11 +117,32 @@ return {
             "saadparwaiz1/cmp_luasnip",
             "hrsh7th/cmp-buffer",
             "hrsh7th/cmp-path",
+            "hrsh7th/cmp-nvim-lsp-signature-help",
+
+            "onsails/lspkind.nvim"
         },
         config = function()
             local cmp = require('cmp')
+            local lspkind = require('lspkind')
 
             cmp.setup({
+                formatting = {
+                    format = lspkind.cmp_format({
+                        mode = 'symbol',
+                        maxwidth = {
+                            menu = 50,
+                            abbr = 50,
+                        },
+                        ellipsis_char = '...',
+                        show_labelDetails = true,
+                        before = function(entry, vim_item)
+                            return vim_item
+                        end
+                    }),
+                },
+                performance = {
+                    max_view_entries = 32,
+                },
                 snippet = {
                     expand = function(args)
                         require('luasnip').lsp_expand(args.body)
@@ -136,10 +153,13 @@ return {
                         border = "rounded",
                         winhighlight = "Normal:Normal,FloatBorder:Normal,Search:None"
                     },
-                    documentation = {
-                        border = "rounded",
-                        winhighlight = "Normal:Normal,FloatBorder:Normal,Search:None"
-                    },
+                    documentation = vim.tbl_extend(
+                        'force',
+                        cmp.config.window.bordered(),
+                        {
+                            winhighlight = "Normal:Normal,FloatBorder:Normal,Search:None"
+                        }
+                    )
                 },
                 mapping = cmp.mapping.preset.insert({
                     ['<C-b>'] = cmp.mapping.scroll_docs(-4),
@@ -167,6 +187,7 @@ return {
                     { name = 'luasnip' }
                 }, {
                     { name = 'buffer' },
+                    { name = "nvim_lsp_signature_help" },
                 })
             })
 

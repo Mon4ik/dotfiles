@@ -4,6 +4,7 @@
 
 # arch unique:
 ~/.config/hypr > hypr
+~/.config/wofi > wofi
 ~/.config/waybar > waybar
 
 # files

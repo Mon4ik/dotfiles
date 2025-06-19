@@ -2,5 +2,9 @@
 ~/.config/lazygit > lazygit
 ~/.config/ghostty > ghostty
 
+# arch unique:
+~/.config/hypr > hypr
+~/.config/waybar > waybar
+
 # files
 ~/.gitconfig > .gitconfig

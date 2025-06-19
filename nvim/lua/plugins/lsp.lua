@@ -4,8 +4,10 @@ return {
         dependencies = {
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
-            "folke/neoconf.nvim"
+            "folke/neoconf.nvim",
+            "lopi-py/luau-lsp.nvim"
         },
+        priority = 1000,
         lazy = false,
         opts = {
             servers = {
@@ -28,12 +30,22 @@ return {
                     }
                 },
                 rust_analyzer = {},
+                clangd = {
+                },
+
+                svelte = {},
+                ts_ls = {},
+                cssls = {},
+                tailwindcss = {},
+
+                stylua = {},
+
+                jsonls = {},
+                -- protols = {},
 
                 docker_compose_language_service = {},
                 dockerls = {},
                 marksman = {},
-
-                protols = {}
             },
             neoconf = {},
             icons = {
@@ -44,13 +56,13 @@ return {
             }
         },
         keys = {
-            { 'K',         function() vim.lsp.buf.hover() end,                  desc = "Toggle Hover window" },
-            { 'G',         function() vim.diagnostic.open_float() end,          desc = "Open Diagnostic float window" },
-            { '<C-r>',     function() vim.lsp.buf.rename() end,                 desc = "Rename symbol" },
-            { '[d',        function() vim.diagnostic.goto_prev() end,           desc = "Jump to previous diagnostic" },
-            { ']d',        function() vim.diagnostic.goto_next() end,           desc = "Jump to next diagnostic" },
-            { '<leader>a', function() vim.lsp.buf.code_action() end,            desc = "Code actions" },
-            { '<C-f>',     function() vim.lsp.buf.format({ async = true }) end, desc = "Format document",             mode = { 'n', 'x' } }
+            { 'K',         function() vim.lsp.buf.hover() end,         desc = "Toggle Hover window" },
+            { 'G',         function() vim.diagnostic.open_float() end, desc = "Open Diagnostic float window" },
+            { '<C-r>',     function() vim.lsp.buf.rename() end,        desc = "Rename symbol" },
+            { '[d',        function() vim.diagnostic.goto_prev() end,  desc = "Jump to previous diagnostic" },
+            { ']d',        function() vim.diagnostic.goto_next() end,  desc = "Jump to next diagnostic" },
+            { '<leader>a', function() vim.lsp.buf.code_action() end,   desc = "Code actions" },
+            { '<C-f>',     ":Format<CR>",                              desc = "Format document",             mode = { 'n', 'x' } }
         },
         config = function(_, opts)
             local ensure_installed = {}
@@ -73,11 +85,64 @@ return {
                         "keep",
                         {
                             capabilities = capabilities,
+                            on_attach = function(client, bufnr)
+                                local bufopts = { noremap = true, silent = true, buffer = bufnr }
+                                if client.server_capabilities.document_formatting then
+                                    vim.keymap.set({ "v", "n" }, "<C-f>", function()
+                                        vim.lsp.buf.format({})
+                                    end, bufopts)
+                                else
+                                    vim.keymap.set("n", "<C-f>", ":Format<cr>", bufopts)
+                                end
+                            end
                         },
                         config
                     )
                 )
             end
+
+            require("luau-lsp").setup({
+                platform = {
+                    type = "roblox",
+                },
+                types = {
+                    roblox_security_level = "PluginSecurity",
+                },
+                sourcemap = {
+                    enabled = true,
+                    autogenerate = false, -- automatic generation when the server is attached
+                    rojo_project_file = "default.project.json",
+                    sourcemap_file = "sourcemap.json",
+                },
+                plugin = {
+                    enabled = true,
+                    port = 3667,
+                },
+                fflags = {
+                    -- enable_new_solver = true, -- enables the flags required for luau's new type solver
+                    sync = true,               -- sync currently enabled fflags with roblox's published fflags
+                    override = {               -- override fflags passed to luau
+                        LuauTableTypeMaximumStringifierLength = "0",
+                    },
+                },
+                server = {
+                    capabilities = capabilities,
+                    settings = {
+                        ["luau-lsp"] = {
+                            require = {
+                                directoryAliases = {
+                                    ["@pkg/"] = "./Packages/",
+                                    ["@dev-pkg/"] = "./DevPackages/",
+                                    ["@root/"] = "./src/",
+                                    ["@client/"] = "./src/client/",
+                                    ["@server/"] = "./src/server/",
+                                    ["@shared/"] = "./src/shared/"
+                                }
+                            }
+                        }
+                    }
+                },
+            })
 
             vim.diagnostic.config({
                 signs = {
@@ -190,11 +255,6 @@ return {
                     { name = "nvim_lsp_signature_help" },
                 })
             })
-
-            -- Add `:Format` command to format current buffer
-            vim.api.nvim_create_user_command("Format", function()
-                vim.lsp.buf.format()
-            end, {})
 
             -- " Add `:Fold` command to fold current buffer
             vim.api.nvim_create_user_command("Fold", "call CocAction('fold', <f-args>)", { nargs = '?' })

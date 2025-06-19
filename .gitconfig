@@ -9,3 +9,5 @@
     gpgsign = true
 [gpg]
     program = gpg
+[core]
+	ignorecase = false

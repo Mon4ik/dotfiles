@@ -1,0 +1,99 @@
+{
+    "margin": 4,
+    "padding": 4,
+    "spacing": 16, // Gaps between modules (4px)
+    "reload_style_on_change": true,
+    "modules-left": [
+        "cffi/launcher"
+    ],
+    "modules-center": [
+        "hyprland/workspaces"
+    ],
+    "modules-right": [
+        "mpd",
+        "pulseaudio",
+        "bluetooth",
+        "cpu",
+        "temperature",
+        "memory",
+        "custom/amneziawg",
+        "tray",
+        "clock"
+    ],
+    // Modules Center
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "on-click": "activate",
+        "persistent-workspaces": {
+            "*": 5
+        }
+    },
+    "pulseaudio": {
+        "format": "{volume}% {icon}",
+        "format-bluetooth": "{volume}% {icon}",
+        "format-muted": "",
+        "format-icons": {
+            "headphone": "",
+            "hands-free": "",
+            "headset": "",
+            "phone": "",
+            "phone-muted": "",
+            "portable": "",
+            "car": "",
+            "default": [
+                "",
+                ""
+            ]
+        },
+        "scroll-step": 5,
+        "on-click": "pavucontrol"
+    },
+    "bluetooth": {
+        "format": "",
+        "format-disabled": "",
+        "format-connected": " {num_connections}",
+        "tooltip-format": "{controller_alias}\t{controller_address}",
+        "tooltip-format-connected": "{controller_alias}\t{controller_address}\n\n{device_enumerate}",
+        "tooltip-format-enumerate-connected": "{device_alias}\t{device_address}",
+        "on-click": "blueman-manager"
+    },
+    "cpu": {
+        "format": "{usage}% "
+    },
+    "temperature": {
+        "format": "{temperatureC}°C "
+    },
+    "memory": {
+        "format": "{used}GiB ({percentage}%) "
+    },
+    "custom/amneziawg": {
+        "exec": "~/.config/waybar/custom/amneziawg.sh",
+        "on-click": "sudo ~/.config/waybar/custom/amneziawg-click.sh",
+        "restart-interval": 1,
+        "return-type": "json",
+        "format": "{} 󰒍"
+    },
+    "tray": {
+        "spacing": 4
+    },
+    "cffi/launcher": {
+        "module_path": "/home/idkncc/.config/waybar/custom/liblauncher.so",
+        "apps": [
+            {
+                "command": "hyprctl dispatch exec kitty",
+                "name": "Kitty",
+                "icon": ""
+            },
+            {
+                "command": "hyprctl dispatch exec nemo",
+                "name": "Nemo",
+                "icon": ""
+            },
+            {
+                "command": "hyprctl dispatch exec firefox",
+                "name": "Firefox",
+                "icon": ""
+            }
+        ]
+    }
+}

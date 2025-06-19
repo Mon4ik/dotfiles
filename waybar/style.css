@@ -1,0 +1,60 @@
+@import "./colors.css";
+
+* {
+    font-family: Geist, Symbols Nerd Font Mono;
+}
+
+window#waybar {
+    background: alpha(@bg, 0.8);
+    color: @fg;
+
+    border-radius: 12px;
+    border: 1px solid @gray;
+}
+
+tooltip {
+    background: alpha(@bg, 0.8);
+    border: 1px solid rgba(100, 114, 125, 0.5);
+}
+
+tooltip label {
+    color: white;
+}
+
+
+.modules-left {
+    padding: 0 12px;
+}
+
+#launcher {
+    margin: 4px;
+}
+
+#launcher button {
+    min-width: 16px;
+    padding: 5px 9px;
+
+    border-radius: 8px;
+    color: @fg3;
+    font-weight: 300;
+}
+
+.modules-right {
+    padding: 0 12px;
+}
+
+#workspaces {
+    margin: 4px;
+}
+
+#workspaces button {
+    border-radius: 8px;
+    color: @fg3;
+    font-weight: 300;
+}
+
+#workspaces button.active {
+    background: alpha(@bg, 0.4);
+    color: @fg;
+    font-weight: 400;
+}

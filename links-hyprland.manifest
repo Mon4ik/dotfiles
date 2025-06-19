@@ -1,0 +1,15 @@
+~/.config/nvim > nvim
+~/.config/lazygit > lazygit
+~/.config/kitty > kitty
+
+#~/.config/rofi > rofi
+#~/.config/i3 > i3
+#~/.config/i3blocks > i3blocks
+
+~/.config/hypr > hypr
+~/.config/waybar > waybar
+
+# files
+#~/.xprofile > .xprofile
+~/.gitconfig > .gitconfig
+#~/.nvidia-settings-rc > .nvidia-settings-rc

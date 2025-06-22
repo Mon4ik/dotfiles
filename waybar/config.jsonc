@@ -80,8 +80,8 @@
         "module_path": "/home/idkncc/.config/waybar/custom/liblauncher.so",
         "apps": [
             {
-                "command": "hyprctl dispatch exec kitty",
-                "name": "Kitty",
+                "command": "hyprctl dispatch exec ghostty",
+                "name": "Ghostty",
                 "icon": ""
             },
             {
@@ -90,9 +90,9 @@
                 "icon": ""
             },
             {
-                "command": "hyprctl dispatch exec firefox",
-                "name": "Firefox",
-                "icon": ""
+                "command": "hyprctl dispatch exec chromium",
+                "name": "Chromium",
+                "icon": ""
             }
         ]
     }

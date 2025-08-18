@@ -18,6 +18,14 @@ return {
         opts = require("configs.nvim-tree"),
     },
 
+    {
+        "lewis6991/gitsigns.nvim",
+        event = "User FilePost",
+        opts = function()
+            return require("configs.gitsigns")
+        end,
+    },
+
     -- test new blink
     -- { import = "nvchad.blink.lazyspec" },
 

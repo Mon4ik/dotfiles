@@ -22,7 +22,7 @@ return {
                     staged = "+",
                     unmerged = "",
                     renamed = "",
-                    untracked = "",
+                    untracked = "*",
                     deleted = "",
                     ignored = "◌",
                 },

@@ -10,6 +10,6 @@ g.loaded_netrwPlugin = 1
 opt.list = true
 opt.listchars = "space:·"
 
-o.shiftwidth = 2
-o.tabstop = 2
-o.softtabstop = 2
+o.shiftwidth = 4
+o.tabstop = 4
+o.softtabstop = 4

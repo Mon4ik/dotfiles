@@ -10,7 +10,12 @@ M.base46 = {
     },
 }
 
--- M.nvdash = { load_on_startup = true }
-M.ui = {}
+M.nvdash = { load_on_startup = true }
+M.ui = {
+    statusline = {
+        theme = "minimal",
+        order = { "mode", "file", "git", "%=", "lsp_msg", "%=", "cursor" },
+    },
+}
 
 return M

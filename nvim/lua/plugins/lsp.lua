@@ -5,7 +5,8 @@ return {
             "williamboman/mason.nvim",
             "williamboman/mason-lspconfig.nvim",
             "folke/neoconf.nvim",
-            "lopi-py/luau-lsp.nvim"
+            "lopi-py/luau-lsp.nvim",
+            "b0o/schemastore.nvim"
         },
         priority = 1000,
         lazy = false,
@@ -40,7 +41,10 @@ return {
 
                 stylua = {},
 
-                jsonls = {},
+                jsonls = {
+                    schemas = nil, -- set in config function
+                    validate = { enable = true }
+                },
                 -- protols = {},
 
                 docker_compose_language_service = {},
@@ -75,11 +79,19 @@ return {
             require("mason").setup()
             require("mason-lspconfig").setup {
                 ensure_installed = ensure_installed,
+                automatic_enable = {
+                    exclude = { "luau_lsp" },
+                },
             }
 
             local lspconfig = require('lspconfig')
             local capabilities = require('cmp_nvim_lsp').default_capabilities()
             for lsp, config in pairs(opts.servers) do
+                local schemas
+                if lsp == "jsonls" then
+                    schemas = require('schemastore').json.schemas()
+                end
+
                 lspconfig[lsp].setup(
                     vim.tbl_extend(
                         "keep",
@@ -94,7 +106,9 @@ return {
                                 else
                                     vim.keymap.set("n", "<C-f>", ":Format<cr>", bufopts)
                                 end
-                            end
+                            end,
+
+                            schemas = schemas
                         },
                         config
                     )
@@ -120,24 +134,22 @@ return {
                 },
                 fflags = {
                     -- enable_new_solver = true, -- enables the flags required for luau's new type solver
-                    sync = true,               -- sync currently enabled fflags with roblox's published fflags
-                    override = {               -- override fflags passed to luau
+                    sync = true, -- sync currently enabled fflags with roblox's published fflags
+                    override = { -- override fflags passed to luau
                         LuauTableTypeMaximumStringifierLength = "0",
                     },
                 },
-                server = {
-                    capabilities = capabilities,
-                    settings = {
-                        ["luau-lsp"] = {
-                            require = {
-                                directoryAliases = {
-                                    ["@pkg/"] = "./Packages/",
-                                    ["@dev-pkg/"] = "./DevPackages/",
-                                    ["@root/"] = "./src/",
-                                    ["@client/"] = "./src/client/",
-                                    ["@server/"] = "./src/server/",
-                                    ["@shared/"] = "./src/shared/"
-                                }
+                capabilities = capabilities,
+                settings = {
+                    ["luau-lsp"] = {
+                        require = {
+                            directoryAliases = {
+                                ["@pkg/"] = "./Packages/",
+                                ["@dev-pkg/"] = "./DevPackages/",
+                                ["@root/"] = "./src/",
+                                ["@client/"] = "./src/client/",
+                                ["@server/"] = "./src/server/",
+                                ["@shared/"] = "./src/shared/"
                             }
                         }
                     }

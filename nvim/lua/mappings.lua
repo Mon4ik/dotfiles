@@ -1,4 +1,4 @@
-require "nvchad.mappings"
+require("nvchad.mappings")
 
 local map = vim.keymap.set
 local unmap = vim.keymap.del
@@ -7,7 +7,7 @@ map("n", ";", ":", { desc = "CMD enter command mode" })
 
 unmap({ "n", "x" }, "<leader>fm") -- format file
 map({ "n", "x" }, "<C-f>", function()
-    require("conform").format { lsp_fallback = true }
+    require("conform").format({ lsp_fallback = true })
 end, { desc = "general format file" })
 
 unmap("n", "<C-n>") -- NvimTreeToggle

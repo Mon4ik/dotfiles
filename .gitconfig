@@ -11,3 +11,5 @@
     program = gpg
 [core]
 	ignorecase = false
+[safe]
+	directory = /Users/idkncc/Developer/Probe/armbian-build

@@ -12,7 +12,8 @@ return {
 
     formatting = {
         format = lspkind.cmp_format({
-            menu = {}
+            menu = {},
+            show_labelDetails = true,
         }),
     },
 

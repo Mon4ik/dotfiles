@@ -13,9 +13,6 @@ unmap({ "n", "t" }, "<A-v>")
 unmap({ "n", "t" }, "<A-h>")
 unmap({ "n", "t" }, "<A-i>")
 
-map({ "n" }, "<ScrollWheelUp>", "k", { noremap = true })
-map({ "n" }, "<ScrollWheelDown>", "j", { noremap = true })
-
 -- remap file formatting
 unmap({ "n", "x" }, "<leader>fm") -- format file
 map({ "n", "x" }, "<C-f>", function()

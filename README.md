@@ -2,11 +2,12 @@
 
 Collection of my dotfiles
 
-> ![WARNING]
+> [!WARNING]
 >
-> I didn't make Neovim with fancy animations, design, etc. in mind. (because i don't like soy milk)
-> 
-> Also there's no W*ndows support (If you are using operating system for videogames with spyware/bloatware for coding, I have bad news for you...)
+> - No W*ndows support (anytime).
+>   If you are using OS with spyware/bloatware, CMD.exe for coding, you should seek help.
+>
+> - NeoVim config is based of [NvChad]() + modified a lot.
 
 ## `create-links.py`
 

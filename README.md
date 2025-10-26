@@ -1,4 +1,9 @@
-# Dotfiles
+# Dotfiles (legacy)
+
+# THIS REPO NO LONGER MAINTAINED
+
+## new dotfiles, that based of nix/nix-darwin/home-manager etc.
+## https://gitlab.com/idkncc/dotfiles
 
 Collection of my dotfiles
 
